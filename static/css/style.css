@@ -1,0 +1,145 @@
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+html {
+    margin: 0;
+    height: 100vh;
+}
+
+body {
+    animation: background 10s infinite linear;
+    background-image: linear-gradient(
+        to bottom right, #999AC6 30%, #D2D5DD 70%);
+    background-size: 400%;
+}
+form {
+    width: 100%;
+}
+
+input[name=word] {
+    width: 100%;
+    height: 75px;
+    background-color: rgb(139, 140, 214);
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    color: rgb(39, 40, 114);
+    outline: none;
+    font-size: 26px;
+    margin-bottom: 25px;
+    box-shadow: 0 20px 25px rgba(39, 40, 114,  .5);
+}
+
+.btn {
+    text-decoration: none;
+    transition: all .5s;
+    border: none;
+    color: #E8EBE4;
+    background-color: #4D4FE3;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 50px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.btns {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.guessed {
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+.btn:hover {
+    background-color: rgb(47, 49, 197);
+}
+
+html, .container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.heading {
+    font-size: 64px;
+    margin-bottom: 120px;
+}
+
+.word {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.icon {
+    width: 5%;
+    height: 5%;
+    padding: 10px;
+    border-radius: 50px;
+}
+
+.icon.green {
+    background-color: rgba(39, 167, 114, .2);
+    filter: brightness(0) saturate(100%) invert(49%) sepia(95%) saturate(361%) hue-rotate(103deg) brightness(91%) contrast(82%);
+}
+
+.icon.red {
+    background-color: rgba(166, 40, 114, .2);
+    filter: brightness(0) saturate(100%) invert(21%) sepia(52%) saturate(2464%) hue-rotate(296deg) brightness(99%) contrast(95%);
+}
+
+.heading.small {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+.green {
+    color: #27A772;
+}
+.red {
+    color: #A62872;
+}
+
+.blue {
+    color: #2728F1;
+}
+
+.letter {
+    padding: 25px 15px 25px 15px;
+    font-size: 26px;
+    color: #E4E5EE;
+    background-color: #3A3CAB;
+    box-shadow: 0 0 10px rgba(77, 79, 227, .1);
+    display: inline-block;
+    border-radius: 7px;
+    margin-bottom: 25px;
+}
+
+.container {
+    display: flex;
+    width: 75%;
+    padding: 100px;
+    background-color: aliceblue;
+    border-radius: 25px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 25px rgba(0, 0, 0,  .1);
+}
+
+@keyframes background {
+    0% {
+        background-position: 80% 0%;
+    }
+    50% {
+        background-position: 20% 100%;
+    }
+    100% {
+        background-position: 80% 0%;
+    }
+}
+
+

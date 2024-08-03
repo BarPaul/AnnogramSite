@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <title>Угадай слово!</title>
+</head>
+<body>
+    <div class="container">
+        {% if status == 'guessing' %}
+            <h2 class="heading">Разгадай слово!</h2>
+            <ul class="word">
+                {% for letter in word %}
+                    <li class="letter">{{ letter }}</li>
+                {% endfor %}
+            </ul>
+            <form method="post">
+                {% csrf_token %}
+                <input name="word" minlength="{{ len }}" maxlength="{{ len }}" type="text" placeholder="Введи слово" aria-placeholder="Введи слово" required aria-required/>
+                <input name="right" type="hidden" value="{{ encrypted_right }}" />
+                {% for encrypted in encrypted_maybe %}
+                    <input name="maybe{{ forloop.counter0 }}" type="hidden" value="{{ encrypted }}" />
+                {% endfor %}
+                <div class="btns">
+                    <input class="btn" type="submit" value="Отгадать!" />
+                    <a href="/" class="btn">Поменять</a>
+                </div>
+            </form>
+        {% else %}
+            {% if status == 'guessed_right' %}
+                <img class="icon green" src="{% static 'images/right.svg' %}" alt="верно"></img>
+                <p class="heading small green">Молодец ты отгадал(а)!</p>
+            {% elif status == 'guessed_maybe' %}
+                <img class="icon green" src="{% static 'images/right.svg' %}" alt="верно"></img>
+                <p class="heading small blue">Молодец ты отгадал(а) один из вариантов!</p>
+            {% elif status == 'not_guessed' %}
+                <img class="icon red" src="{% static 'images/cross.svg' %}" alt="неверно"></img>
+                <p class="heading small red">У тебя еще есть попытка!</p>
+            {% endif %}
+            <p class="guessed">Загаданное слово: <span class="green">{{ guessed }}</span></p>
+            {% if maybe %}
+                <p class="guessed">Также могли быть:</p>
+                {% for item in maybe %}
+                    <ul class="word">
+                        {% for char in item %}
+                            <li class="letter">{{ char }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            {% endif %}
+            <a href="/" class="btn">Вернуться</a>
+        {% endif %}
+    </div>
+</body>
+</html>
