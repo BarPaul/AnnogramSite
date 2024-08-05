@@ -1,15 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.handlers.wsgi import WSGIRequest
+from django.contrib.auth.decorators import login_required
+from scrumble_site.forms import RegisterForm, LoginForm
 from random import choice, shuffle
-from aes512 import AES
+from utils.aes512 import AES
+from dotenv import load_dotenv, find_dotenv
+from os import getenv
+
+load_dotenv(find_dotenv())
 
 crypter = AES()
-key = '3421WO46rDL12e Suck134S so that the best app of the ever 135@!#$'
+key = getenv("KEY")
 
+@login_required(login_url='/login')
 def index(req: WSGIRequest):
     if req.POST:
         return post_index(req)
-    with open('words.txt', encoding='utf-8') as f:
+    with open('data/words.txt', encoding='utf-8') as f:
         WORDS = f.read().splitlines()
     right = choice(WORDS)
     WORDS.remove(right)
@@ -27,9 +34,8 @@ def index(req: WSGIRequest):
     }
     return render(req, 'index.html', data)
 
-def post_index(req):
+def post_index(req: WSGIRequest):
     getted = req.POST
-    print(getted)
     decrypted_right = crypter.decrypt(key, getted.get("right"))
     maybe = [getted[key] for key in getted if key.startswith('maybe')]
     if maybe:
@@ -39,7 +45,6 @@ def post_index(req):
         'maybe': maybe
     }
     word = getted.get("word").lower()
-    print(word, decrypted_right, maybe)
     if word == decrypted_right:
         status = 'guessed_right'
     elif word in maybe:
@@ -48,3 +53,31 @@ def post_index(req):
         status = 'not_guessed'
     data['status'] = status
     return render(req, 'index.html', data)
+
+def register(req: WSGIRequest):
+    if req.method == 'GET':
+        form = RegisterForm()
+        return render(req, 'register.html', {'form': form})
+    elif req.method == 'POST':
+        form = RegisterForm(req.POST) 
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            return redirect('index')
+        else:
+            return render(req, 'register.html', {'form': form})
+
+
+def login(req: WSGIRequest):
+    if req.method == 'GET':
+        return render(req, 'login.html', {'form': LoginForm()})
+    elif req.method == 'POST':
+        form = RegisterForm(req.POST) 
+        if not form.is_valid():
+            return render(req, 'login.html', {'form': form})
+        user = form.save(commit=False)
+        user.username = user.username.lower()
+        user.save()
+        return redirect('index')
+            
