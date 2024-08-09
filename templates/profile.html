@@ -4,6 +4,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Профиль {{ user.username }}</title>
@@ -32,17 +33,17 @@
                 </a>
             </div>
             <div class="flex justify-evenly items-center h-60">
-                <div class="radial-progress bg-lime-200 text-green-500 text-center" style="--value:{{ profile.win_percent }}; --size: 10rem; --thickness: 10px;" role="progressbar">
-                    <p class="text-sm text-lime-500 font-semibold">Угадано</p>
-                    <p class="text-2xl font-bold">{{ profile.win_percent }}%</p>
+                <div class="radial-progress bg-lime-200 text-green-500 text-center" style="--value:{{ profile.win_percent }}; --size: var(--cur-size); --thickness: 10px;" role="progressbar">
+                    <p class="md:text-sm text-xs text-lime-500 font-semibold">Угадано</p>
+                    <p class="md:text-2xl text-xl font-bold">{{ profile.win_percent }}%</p>
                 </div>
-                <div class="radial-progress bg-red-200 text-orange-500 text-center" style="--value:{{ profile.lose_percent }}; --size: 10rem; --thickness: 10px;" role="progressbar">
-                    <p class="text-sm text-red-500 font-semibold">Не отгадано</p>
-                    <p class="text-2xl font-bold">{{ profile.lose_percent }}%</p>
+                <div class="radial-progress bg-red-200 text-orange-500 text-center" style="--value:{{ profile.lose_percent }}; --size: var(--cur-size); --thickness: 10px;" role="progressbar">
+                    <p class="md:text-sm text-xs text-red-500 font-semibold">Не отгадано</p>
+                    <p class="md:text-2xl text-xl font-bold">{{ profile.lose_percent }}%</p>
                 </div>
-                <div class="radial-progress bg-sky-200 text-violet-500 text-center" style="--value: 100; --size: 10rem; --thickness: 10px;" role="progressbar">
-                    <p class="text-sm text-violet-500 font-semibold">Попыток</p>
-                    <p class="text-2xl font-bold">{{ profile.total }}</p>
+                <div class="radial-progress bg-sky-200 text-violet-500 text-center" style="--value: 100; --size: var(--cur-size); --thickness: 10px;" role="progressbar">
+                    <p class="md:text-sm text-xs text-violet-500 font-semibold">Попыток</p>
+                    <p class="md:text-2xl text-xl font-bold">{{ profile.total }}</p>
                 </div>
             </div>
             {% if profile.is_owner %}
@@ -61,7 +62,7 @@
                         <input class="btn btn-ghost bg-red-500 hover:bg-red-600 text-red-900 rounded-md w-9/12" name="delete" type="submit" value="УДАЛИТЬ" />
                     </form>
                 </div>
-                <p class="md:text-xl text-md text-center">
+                <p class="lg:text-2xl md:text-xl text-xs text-center">
                     Cсылка на ваш профиль:<br>
                     <a href="https://paulbaur.pythonanywhere.com/profile/{{ user.id }}/" class="text-primary">https://paulbaur.pythonanywhere.com/profile/{{ user.id }}/</a>
                 </p>

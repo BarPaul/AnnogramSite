@@ -11,10 +11,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_(q8skv6idcexb*v-uy9x0@w$pl%uo1*igryw%&fbx8k+1y-x4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-# ALLOWED_HOSTS = ['pythonanywhere.com', 'www.pythonanywhere.com', 'paulbaur.pythonanywhere.com']
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['pythonanywhere.com', 'www.pythonanywhere.com', 'paulbaur.pythonanywhere.com']
+# ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -105,7 +105,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static', BASE_DIR / 'static' / 'images']
+STATICFILES_DIRS = [BASE_DIR / 'static', BASE_DIR / 'static' / 'css', BASE_DIR / 'static' / 'images']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
