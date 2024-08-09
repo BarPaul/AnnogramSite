@@ -41,7 +41,7 @@ def validate_form(req: WSGIRequest):
         print(form.errors)
         return False, form
     username, password = list(form.data.values())[1:]
-    user = auth(username=username, password=password)
+    user = auth(username=username.lower(), password=password)
     if user is None or not user.check_password(password):
         form.add_error("password", "Неверный пароль или логин")
         form.add_error("username", "Неверный пароль или логин")
