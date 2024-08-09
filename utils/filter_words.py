@@ -1,4 +1,4 @@
-MIN_LEN, MAX_LEN = 3, 10
+MIN_LEN, MAX_LEN = 3, 6
 with open('data/all_words.txt', encoding='utf-8') as f:
     data = f.read().splitlines()
 

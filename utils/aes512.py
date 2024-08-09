@@ -11,12 +11,10 @@ class AES:
         self.ORDER = 8
         self.ROUNDKEY = []
 
-    # Key Scheduling
     def __keySchedule(self, KEY):
         ROW, COL = 8, 8
         hexKey = keyToHexArray(KEY, ROW, COL)
         self.ROUNDKEY.append(hexKey)
-        #print(hexKey)
         for i in range(0, self.ROUND):
             prev_arr = self.ROUNDKEY[-1]
             last_col = prev_arr[ROW-1]
@@ -26,8 +24,6 @@ class AES:
             col_2 = xorArray(col_1, prev_arr[1], self.ORDER)
             col_3 = xorArray(col_2, prev_arr[2], self.ORDER)
             col_4 = xorArray(col_3, prev_arr[3])
-            # additional non-linear transformation after the fourth column
-            # https://crypto.stackexchange.com/questions/20/what-are-the-practical-differences-between-256-bit-192-bit-and-128-bit-aes-enc#answer-1527
             col_5 = xorArray(arraySbox(np.copy(col_4)), prev_arr[4], self.ORDER)
             col_6 = xorArray(col_5, prev_arr[5], self.ORDER)
             col_7 = xorArray(col_6, prev_arr[6], self.ORDER)
@@ -36,7 +32,6 @@ class AES:
             self.ROUNDKEY.append(new_arr)
         self.__convertRoundKey()
 
-    # Convert 8 4*8 Matrix to 15 4*4 Matrix
     def __convertRoundKey(self):
         self.ROUNDKEY = np.concatenate(self.ROUNDKEY)
         temp = []
@@ -44,11 +39,8 @@ class AES:
             temp.append(self.ROUNDKEY[i*8:i*8+8])
         self.ROUNDKEY = temp
 
-    # Encryption Process
     def __encryptProcess(self, TEXT):
-        #print(TEXT)
         hexData = keyToHexArray(TEXT, self.ORDER, self.ORDER)
-        #print(hexData)
         cipher_arr = addRoundKey(hexData, self.ROUNDKEY[0])
         for i in range(1, self.ROUND+1):
             arr = cipher_arr
@@ -60,7 +52,6 @@ class AES:
             cipher_arr = arr
         return cipher_arr
 
-    # Encryption Add Padding
     def __addPadding(self, data):
         bytes = self.ORDER**2
         bits_arr = []
@@ -74,7 +65,6 @@ class AES:
                 break
         return bits_arr
 
-    # Decryption Process
     def __decryptProcess(self, CIPHER_HEX):
         hexData = hexToMatrix(CIPHER_HEX, self.ORDER)
         plain_arr = addRoundKey(hexData, self.ROUNDKEY[-1])
@@ -88,7 +78,6 @@ class AES:
             plain_arr = arr
         return plain_arr
 
-    # Decryption Delete Padding
     def __delPadding(self, data):
         verify = data[-1]
         bytes = self.ORDER**2
@@ -100,7 +89,6 @@ class AES:
             return data
         return data
 
-    #Encryption
     def encrypt(self, KEY, TEXT, type='hex'):
         TEXT = b64encode(TEXT.encode()).decode()
         text_arr = self.__addPadding(TEXT)
@@ -112,7 +100,6 @@ class AES:
             for j in cipher_text:
                 hex_ecrypt+=f'{j:02x}'
         self.ROUNDKEY = []
-        #conversion
         if(type == 'b64'):
             return b64encode(bytes.fromhex(hex_ecrypt)).decode()
         if(type == '0b'):
@@ -125,7 +112,6 @@ class AES:
             }
         return hex_ecrypt
 
-    # Decryption
     def decrypt(self, KEY, CIPHER, type='hex'):
         block = self.ORDER*self.ORDER*2
         if type in ['hex', '0b', 'b64']:
@@ -158,19 +144,3 @@ class AES:
 
         else:
             raise Exception(f"type := ['hex', '0b', 'b64'] but got '{type}'")
-
-
-if(__name__ == '__main__'):
-
-    aes512 = AES()
-
-    key = 'Thats my Kung Fu1234567876543210Thats my Kung Fu1234567876543210'
-    msg = input()
-    encode = 'hex'      # hex, b64 => base64, 0b => binary
-    
-    x = aes512.encrypt(key, msg, encode)
-    print(x)
-
-    # # decode from binary
-    y = aes512.decrypt('Thats my Kung Fu1234567876543210Thats my Kung Fu1234567876543210', x, encode)     
-    print(y)

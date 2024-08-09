@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="sunset">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Профиль {{ user.username }}</title>
+</head>
+<body>
+    <div class="flex justify-end items-center text-center bg-base-100 w-full">
+        <form action="/login" method="post" class="btn btn-accent btn-square mr-5 mt-5">
+            {% csrf_token %}
+            <button name="logout" type="submit" class="flex justify-center items-center">
+                <img class="w-8/12 h-8/12" src="{% static 'images/logout.png' %}" alt="quit.png">
+            </button>
+        </form>
+        <a class="btn btn-primary text-xl mr-10 mt-5 w-25" href="/profile/{{ user.id }}">
+            <p>{{ viewer.username }}</p>
+        </a>
+    </div>
+    <div class="flex w-full h-98vh flex-col justify-center items-center">
+        <div class="card bg-base-200 shadow-xl w-8/12 h-90">
+            <div class="flex avatar w-13 h-12 bg-accent rounded-xl justify-between items-center">
+                <div class="flex flex-row w-40 h-10 justify-between items-center text-center">
+                    <img class="max-w-10 h-10 inline" src="{% static 'images/avatar.png' %}" alt="avatar.png" />
+                    <h1 class="text-xl font-mono ml-5 text-secondary font-bold inline">{{ user.username }}</h1>
+                </div>
+                <a href="/" class="btn btn-accent">
+                    <img class="max-w-10 h-10" src="{% static 'images/arrow.png' %}" alt="arrow.png" />
+                </a>
+            </div>
+            <div class="flex justify-evenly items-center h-60">
+                <div class="radial-progress bg-lime-200 text-green-500 text-center" style="--value:{{ profile.win_percent }}; --size: 10rem; --thickness: 10px;" role="progressbar">
+                    <p class="text-sm text-lime-500 font-semibold">Угадано</p>
+                    <p class="text-2xl font-bold">{{ profile.win_percent }}%</p>
+                </div>
+                <div class="radial-progress bg-red-200 text-orange-500 text-center" style="--value:{{ profile.lose_percent }}; --size: 10rem; --thickness: 10px;" role="progressbar">
+                    <p class="text-sm text-red-500 font-semibold">Не отгадано</p>
+                    <p class="text-2xl font-bold">{{ profile.lose_percent }}%</p>
+                </div>
+                <div class="radial-progress bg-sky-200 text-violet-500 text-center" style="--value: 100; --size: 10rem; --thickness: 10px;" role="progressbar">
+                    <p class="text-sm text-violet-500 font-semibold">Попыток</p>
+                    <p class="text-2xl font-bold">{{ profile.total }}</p>
+                </div>
+            </div>
+            {% if profile.is_owner %}
+                <div class="flex justify-between items-center">
+                    <form method="post" class="w-6/12">
+                        {% csrf_token %}
+
+                        {% if profile.is_private %}
+                            <input class="btn btn-warning rounded-md w-9/12" name="change_open" type="submit" value="Открыть" />
+                        {% else %}
+                            <input class="btn btn-info rounded-md w-9/12" name="change_private" type="submit" value="Закрыть" />
+                        {% endif %}
+                    </form>
+                    <form method="post" class="flex justify-end w-6/12">
+                        {% csrf_token %}
+                        <input class="btn btn-ghost bg-red-500 hover:bg-red-600 text-red-900 rounded-md w-9/12" name="delete" type="submit" value="УДАЛИТЬ" />
+                    </form>
+                </div>
+                <p class="md:text-xl text-md text-center">
+                    Cсылка на ваш профиль:<br>
+                    <a href="https://paulbaur.pythonanywhere.com/profile/{{ user.id }}/" class="text-primary">https://paulbaur.pythonanywhere.com/profile/{{ user.id }}/</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

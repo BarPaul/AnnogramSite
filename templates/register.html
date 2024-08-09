@@ -1,31 +1,35 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="sunset">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Регистрация</title>
 </head>
-<body>
-    <form method="POST" novalidate>
-        {% csrf_token %}
-        <h2>Регистрация</h2>
-            
-        {% for field in form %}
-        <p>
-            {% if field.errors %}
-            <ul class="errorlist">
-                {% for error in field.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {{ field.label_tag }} {{ field }}
-        </p>
-        {% endfor %}
-        <input type="submit" value="Register" />
-        <a href="/login">Уже есть аккаунт??</a>
-    </form>
+<body class="flex w-screen h-screen flex-col justify-center items-center">
+    <div class="card bg-base-200 shadow-2xl w-96">
+        <form method="POST" novalidate class="card-body">
+            {% csrf_token %}
+            <h1 class="text-4xl text-center text-primary font-bold mb-7">Регистрация</h1>
+            {% for field in form %}
+            <p>
+                <label class="text-lg font-semibold">{{ field.label }}</label>
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        {% if forloop.counter0 < 2 %}
+                            <br><label class="text-xs"><span class="text-xs text-red-300">*</span> {{ error }}</label>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {{ field }}<br>
+            </p>
+            {% endfor %}
+            <br>
+            <input type="submit" value="Register" class="btn btn-primary btn-outline"/>
+            <a href="/login" class="btn btn-link">Уже есть аккаунт?</a>
+        </form>
+    </div>
 </body>
 </html>

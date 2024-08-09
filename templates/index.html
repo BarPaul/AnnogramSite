@@ -1,56 +1,72 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="sunset">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Угадай слово!</title>
 </head>
-<body>
-    <div class="container">
+<body class="flex flex-col w-screen h-screen justify-center items-center">
+    <div class="flex justify-end items-center text-center bg-base-100 w-full">
+        <form action="/login" method="post" class="btn btn-accent btn-square mr-5 mt-5">
+            {% csrf_token %}
+            <button name="logout" type="submit" class="flex justify-center items-center">
+                <img class="w-8/12 h-8/12" src="{% static 'images/logout.png' %}" alt="quit.png">
+            </button>
+        </form>
+        <a class="btn btn-primary text-xl mr-10 mt-5 w-25" href="/profile/{{ user.id }}">
+            <p>{{ user.username }}</p>
+        </a>
+    </div>
+    <div class="card-body bg-base-200 w-25 h-25 justify-center items-center">
         {% if status == 'guessing' %}
-            <h2 class="heading">Разгадай слово!</h2>
-            <ul class="word">
+            <h2 class="text-6xl text-primary font-sans lg:mb-10 mb-16">Разгадай слово!</h2>
+            <ul class="flex flex-row md:w-8/12 w-10/12 justify-evenly items-center mb-5">
                 {% for letter in word %}
-                    <li class="letter">{{ letter }}</li>
+                    <li class="btn btn-square btn-secondary btn-sm btn-outline rounded-md text-xl no-animation">{{ letter }}</li>
                 {% endfor %}
             </ul>
-            <form method="post">
+            <form method="post" class="flex flex-col md:w-8/12 w-10/12 justify-center items-center">
                 {% csrf_token %}
-                <input name="word" minlength="{{ len }}" maxlength="{{ len }}" type="text" placeholder="Введи слово" aria-placeholder="Введи слово" required aria-required/>
+                <input name="word" minlength="{{ len }}" maxlength="{{ len }}" type="text" placeholder="Введи слово" aria-placeholder="слово" required aria-required class="input input-bordered rounded-md input-accent w-full mb-5 text-accent placeholder-neutral-content text-center text-lg"/>
                 <input name="right" type="hidden" value="{{ encrypted_right }}" />
                 {% for encrypted in encrypted_maybe %}
                     <input name="maybe{{ forloop.counter0 }}" type="hidden" value="{{ encrypted }}" />
                 {% endfor %}
-                <div class="btns">
-                    <input class="btn" type="submit" value="Отгадать!" />
-                    <a href="/" class="btn">Поменять</a>
+                <div class="flex flex-row w-full justify-between items-center">
+                    <input class="btn btn-accent rounded-md w-4/12" type="submit" value="Отгадать!" />
+                    <a href="/" class="btn btn-secondary rounded-md w-4/12">Поменять</a>
                 </div>
             </form>
         {% else %}
-            {% if status == 'guessed_right' %}
-                <img class="icon green" src="{% static 'images/right.svg' %}" alt="верно"></img>
-                <p class="heading small green">Молодец ты отгадал(а)!</p>
-            {% elif status == 'guessed_maybe' %}
-                <img class="icon green" src="{% static 'images/right.svg' %}" alt="верно"></img>
-                <p class="heading small blue">Молодец ты отгадал(а) один из вариантов!</p>
-            {% elif status == 'not_guessed' %}
-                <img class="icon red" src="{% static 'images/cross.svg' %}" alt="неверно"></img>
-                <p class="heading small red">У тебя еще есть попытка!</p>
-            {% endif %}
-            <p class="guessed">Загаданное слово: <span class="green">{{ guessed }}</span></p>
+            <div class="flex flex-col justify-center items-center mb-20">
+                {% if status == 'guessed_right' %}
+                    <img class="w-20 bg-gradient-to-br from-green-500 to-lime-300 rounded-full" src="{% static 'images/right.svg' %}" alt="верно"></img>
+                    <p class="text-4xl text-accent mt-5 mb-5">Молодец ты отгадал(а)!</p>
+                {% elif status == 'guessed_maybe' %}
+                    <img class="w-20 bg-gradient-to-br from-blue-500 to-sky-300 rounded-full" src="{% static 'images/right.svg' %}" alt="верно"></img>
+                    <p class="text-4xl text-secondary mt-5 mb-5">Молодец ты отгадал(а) один из вариантов!</p>
+                {% elif status == 'not_guessed' %}
+                    <img class="w-20 bg-gradient-to-br from-red-500 to-orange-300 rounded-full" src="{% static 'images/cross.svg' %}" alt="неверно"></img>
+                    <p class="text-4xl text-primary mt-5 mb-5">Хорошая попытка!</p>
+                {% endif %}
+                <p class="text-xl">Загаданное слово: <span class="text-xl text-green-300">{{ guessed }}</span></p>
+            </div>
             {% if maybe %}
-                <p class="guessed">Также могли быть:</p>
-                {% for item in maybe %}
-                    <ul class="word">
-                        {% for char in item %}
-                            <li class="letter">{{ char }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endfor %}
+                <div class="flex flex-col justify-center items-center w-full">
+                    <p class="text-lg mb-5">Также могли быть:</p>
+                    {% for item in maybe %}
+                        <ul class="flex flex-row md:w-6/12 w-8/12 justify-evenly items-center mb-20">
+                            {% for char in item %}
+                                <li class="btn btn-square btn-secondary btn-sm btn-outline rounded-md text-xl no-animation">{{ char }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+                </div>
             {% endif %}
-            <a href="/" class="btn">Вернуться</a>
+            <a href="/" class="btn btn-primary btn-wide">Вернуться</a>
         {% endif %}
     </div>
 </body>
