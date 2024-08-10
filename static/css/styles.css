@@ -2,6 +2,7 @@
     --cur-size: 10rem;
 }
 
+
 @media screen and (max-width: 670px) {
     :root {
         --cur-size: 8rem;
@@ -11,5 +12,11 @@
 @media screen and (max-width: 563px) {
     :root {
         --cur-size: 5rem;
+    }
+}
+
+@media screen and (max-width: 1025px) and (orientation: landscape) {
+    #stat1, #stat2 {
+        display: none;
     }
 }

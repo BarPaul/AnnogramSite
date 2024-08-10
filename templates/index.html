@@ -4,11 +4,12 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Угадай слово!</title>
 </head>
-<body class="flex flex-col w-screen h-screen justify-center items-center">
+<body class="flex flex-col w-screen h-screen justify-center">
     <div class="flex justify-end items-center text-center bg-base-100 w-full">
         <form action="/login" method="post" class="btn btn-accent btn-square mr-5 mt-5">
             {% csrf_token %}
@@ -22,13 +23,13 @@
     </div>
     <div class="card-body bg-base-200 w-25 h-25 justify-center items-center">
         {% if status == 'guessing' %}
-            <h2 class="text-6xl text-primary font-sans lg:mb-10 mb-16">Разгадай слово!</h2>
-            <ul class="flex flex-row md:w-8/12 w-10/12 justify-evenly items-center mb-5">
+            <h2 class="text-6xl text-primary font-sans lg:mb-10 mb-5">Разгадай слово!</h2>
+            <ul class="flex flex-row md:w-6/12 w-10/12 justify-evenly items-center mb-5">
                 {% for letter in word %}
                     <li class="btn btn-square btn-secondary btn-sm btn-outline rounded-md text-xl no-animation">{{ letter }}</li>
                 {% endfor %}
             </ul>
-            <form method="post" class="flex flex-col md:w-8/12 w-10/12 justify-center items-center">
+            <form method="post" class="flex flex-col md:w-6/12 w-10/12 justify-center items-center">
                 {% csrf_token %}
                 <input name="word" minlength="{{ len }}" maxlength="{{ len }}" type="text" placeholder="Введи слово" aria-placeholder="слово" required aria-required class="input input-bordered rounded-md input-accent w-full mb-5 text-accent placeholder-neutral-content text-center text-lg"/>
                 <input name="right" type="hidden" value="{{ encrypted_right }}" />
@@ -40,6 +41,28 @@
                     <a href="/" class="btn btn-secondary rounded-md w-4/12">Поменять</a>
                 </div>
             </form>
+            <div id="stat1" class="stats stats-vertical md:stats-horizontal shadow w-8/12 md:w-6/12 mt-10">
+                <div class="stat h-20 md:h-30">
+                  <div class="stat-title text-md md:text-xl">Пользователей</div>
+                  <div class="stat-value text-primary text-lg md:text-2xl">{{ total.users }}</div>
+                </div>
+
+                <div class="stat h-20 md:h-30">
+                    <div class="stat-title">Лучший<br>пользователь</div>
+                    <div class="stat-value text-xl text-accent"><a href="/profile/{{ best_user.id }}">{{ best_user.username }}</a></div>
+                </div>
+            </div>
+            <div id="stat2" class="stats stats-vertical md:stats-horizontal shadow w-8/12 md:w-6/12 h-25">
+                <div class="stat">
+                  <div class="stat-title">Выигрыши</div>
+                  <div class="stat-value text-secondary">{{ total.wins }}</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">Проигрыши</div>
+                    <div class="stat-value text-warning">{{ total.loses }}</div>
+                </div>
+            </div>
         {% else %}
             <div class="flex flex-col justify-center items-center mb-20">
                 {% if status == 'guessed_right' %}

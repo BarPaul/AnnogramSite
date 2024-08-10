@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user, decorators
+from django.contrib.auth.models import User
 from django.core.handlers.wsgi import WSGIRequest
 from users.models import Profile
 from random import choice, shuffle
@@ -26,13 +27,25 @@ def index(req: WSGIRequest):
         shuffle(shuffled)
     encrypted_right, encrypted_maybe = crypter.encrypt(key, right), list(map(lambda d: crypter.encrypt(key, d), maybe))
     user = get_user(req)
+    total_wins, total_loses, best_wins = 0, 0, float('-inf')
+    for profile in Profile.objects.all():
+        total_wins += profile.win
+        total_loses += profile.lose
+        if profile.win - profile.lose > best_wins:
+            best_user = profile.user
     data = {
         'status': 'guessing',
         'word': ''.join(shuffled),
         'encrypted_right': encrypted_right,
         'encrypted_maybe': encrypted_maybe,
         'len': len(shuffled),
-        'user': user
+        'user': user,
+        'total': {
+            'users': len(User.objects.all()),
+            'wins': total_wins,
+            'loses': total_loses,
+        },
+        'best_user': best_user
     }
     return render(req, 'index.html', data)
 
