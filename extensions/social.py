@@ -1,5 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
-from django.http import HttpResponseNotFound, HttpResponseForbidden
+from django.shortcuts import render, redirect
 from django.contrib.auth import decorators, get_user, models
 from django.core.handlers.wsgi import WSGIRequest
 from users.models import Profile
@@ -34,8 +33,9 @@ def get_profile(req: WSGIRequest, user, profile, viewer):
         profile.total = profile.win + profile.lose
         profile.win_percent = int(profile.win / profile.total * 100)
         profile.lose_percent = 100 - profile.win_percent
+        profile.rating = f'{profile.win / (profile.total + 1) * profile.total:.2f}'
     except ZeroDivisionError:
-        profile.total, profile.win_percent, profile.lose_percent = 0, 0, 0
+        profile.total, profile.win_percent, profile.lose_percent, profile.rating = 0, 0, 0, 0
     return render(req, 'profile.html', {'profile': profile, 'user': user, 'viewer': viewer})
 
 def change_private(req: WSGIRequest, user):
@@ -50,4 +50,4 @@ def change_private(req: WSGIRequest, user):
 def delete_profile(user: models.User, profile: Profile):
     if profile.is_owner:
         user.delete()
-        return redirect('login')
+    return redirect('login')

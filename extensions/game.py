@@ -27,12 +27,15 @@ def index(req: WSGIRequest):
         shuffle(shuffled)
     encrypted_right, encrypted_maybe = crypter.encrypt(key, right), list(map(lambda d: crypter.encrypt(key, d), maybe))
     user = get_user(req)
-    total_wins, total_loses, best_wins = 0, 0, float('-inf')
+    user_profile = Profile.objects.get(user=user)
+    total_wins, total_loses, best = 0, 0, float('-inf')
     for profile in Profile.objects.all():
         total_wins += profile.win
         total_loses += profile.lose
-        if profile.win - profile.lose > best_wins:
+        user_rate = profile.win / (profile.lose + profile.win + 1) * (profile.lose + profile.win)
+        if user_rate > best:
             best_user = profile.user
+            best = user_rate
     data = {
         'status': 'guessing',
         'word': ''.join(shuffled),

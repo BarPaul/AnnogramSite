@@ -10,7 +10,7 @@
     <title>Угадай слово!</title>
 </head>
 <body class="flex flex-col w-screen h-screen justify-center">
-    <div class="flex justify-end items-center text-center bg-base-100 w-full">
+    <div class="flex bg-base-200 justify-end items-center text-center bg-base-100 w-full">
         <form action="/login" method="post" class="btn btn-accent btn-square mr-5 mt-5">
             {% csrf_token %}
             <button name="logout" type="submit" class="flex justify-center items-center">
@@ -43,24 +43,24 @@
             </form>
             <div id="stat1" class="stats stats-vertical md:stats-horizontal shadow w-8/12 md:w-6/12 mt-10">
                 <div class="stat h-20 md:h-30">
-                  <div class="stat-title text-md md:text-xl">Пользователей</div>
-                  <div class="stat-value text-primary text-lg md:text-2xl">{{ total.users }}</div>
+                    <div class="stat-title text-md md:text-xl">Пользователей</div>
+                    <div class="stat-value text-primary text-lg md:text-2xl">{{ total.users }}</div>
                 </div>
 
                 <div class="stat h-20 md:h-30">
-                    <div class="stat-title">Лучший<br>пользователь</div>
-                    <div class="stat-value text-xl text-accent"><a href="/profile/{{ best_user.id }}">{{ best_user.username }}</a></div>
+                    <div class="stat-title text-md md:text-xl">Лучший пользователь</div>
+                    <div class="stat-value text-warning text-lg md:text-2xl"><a href="/profile/{{ best_user.id }}">{{ best_user.username }}</a></div>
                 </div>
             </div>
             <div id="stat2" class="stats stats-vertical md:stats-horizontal shadow w-8/12 md:w-6/12 h-25">
                 <div class="stat">
-                  <div class="stat-title">Выигрыши</div>
-                  <div class="stat-value text-secondary">{{ total.wins }}</div>
+                  <div class="stat-title text-md md:text-xl">Выигрыши</div>
+                  <div class="stat-value text-secondary text-lg md:text-2xl">{{ total.wins }}</div>
                 </div>
 
                 <div class="stat">
-                    <div class="stat-title">Проигрыши</div>
-                    <div class="stat-value text-warning">{{ total.loses }}</div>
+                    <div class="stat-title text-md md:text-xl">Проигрыши</div>
+                    <div class="stat-value text-accent text-lg md:text-2xl">{{ total.loses }}</div>
                 </div>
             </div>
         {% else %}
