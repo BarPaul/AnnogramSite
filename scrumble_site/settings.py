@@ -1,7 +1,7 @@
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Build paths inside the project like this: BASE_DIR.parent / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -13,8 +13,8 @@ SECRET_KEY = 'django-insecure-_(q8skv6idcexb*v-uy9x0@w$pl%uo1*igryw%&fbx8k+1y-x4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['pythonanywhere.com', 'www.pythonanywhere.com', 'paulbaur.pythonanywhere.com']
-# ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ['pythonanywhere.com', 'www.pythonanywhere.com', 'paulbaur.pythonanywhere.com']
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -43,7 +43,7 @@ ROOT_URLCONF = 'scrumble_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': [BASE_DIR.parent / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,7 +105,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static', BASE_DIR / 'static' / 'css', BASE_DIR / 'static' / 'images']
+STATICFILES_DIRS = [BASE_DIR.parent / 'static', BASE_DIR.parent / 'static' / 'css', BASE_DIR.parent / 'static' / 'images']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

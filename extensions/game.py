@@ -27,7 +27,6 @@ def index(req: WSGIRequest):
         shuffle(shuffled)
     encrypted_right, encrypted_maybe = crypter.encrypt(key, right), list(map(lambda d: crypter.encrypt(key, d), maybe))
     user = get_user(req)
-    user_profile = Profile.objects.get(user=user)
     total_wins, total_loses, best = 0, 0, float('-inf')
     for profile in Profile.objects.all():
         total_wins += profile.win

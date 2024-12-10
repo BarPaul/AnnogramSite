@@ -1,4 +1,4 @@
-import views
+import scrumble_site.views as views
 from extensions.game import index
 from extensions.social import profile_system
 from django.urls import path
